@@ -9,11 +9,27 @@
         {{ item.authors.join(',') }}
       </div>
     </div>
-    <div>
+    <div *ngIf="item.finished; then finished else notFinished"></div>
+    <ng-template #finished>
+      <div class="reading-list-item-finished-text">
+        <strong>Finished on</strong>
+        {{ item.finishedDate | date }}
+      </div>
+    </ng-template>
+    <ng-template #notFinished>
       <button
         mat-icon-button
-        color="warn"
+        (click)="markBookAsFinished(item)"
+        data-testing="mark-as-finished"
+      >
+        <mat-icon class="mark-finish-circle">check_circle</mat-icon>
+      </button>
+    </ng-template>
+    <div>
+      <button
+        mat-icon-button color="warn"
         [attr.aria-label]="'Remove ' + item.title + ' from reading list'"
+        data-testing="remove-book-button"
         (click)="removeFromReadingList(item)"
       >
         <mat-icon>remove_circle</mat-icon>
